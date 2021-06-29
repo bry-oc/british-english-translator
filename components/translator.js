@@ -5,7 +5,7 @@ const britishOnly = require('./british-only.js')
 
 class Translator {
     translateToAmerican(text) {
-        let words = text.split(/\s|(?=[(?<!\d\d?)\.(?!\d\d)])|(?=[\?|\!])/);
+        let words = text.split(/\s|(?=[\.](?!\d{2}))|(?=[\?|\!])/);
         console.log(words);
         let translated = []
         let word;
