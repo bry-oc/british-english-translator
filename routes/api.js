@@ -28,6 +28,13 @@ module.exports = function (app) {
         } else {
           return res.json({text: text, translation: translation});
         }        
+      } else if(locale === 'british-to-american'){
+        let translation = translator.translateToAmerican(text);
+        if(text === translation){
+          return res.json({text: text, translation: 'Everything looks good to me!'});
+        } else {
+          return res.json({text: text, translation: translation});
+        }     
       }
     });
 };

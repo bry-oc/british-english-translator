@@ -5,7 +5,37 @@ const britishOnly = require('./british-only.js')
 
 class Translator {
     translateToAmerican(text) {
-
+        let words = text.split(/\s|(?=[\.])/);
+        let translated = []
+        let word;
+        console.log(words);
+        for(let i = 0; i < words.length; i++) {
+            if (britishOnly[words[i].toLowerCase()]) {
+                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase()] + '</span>'; 
+            } else if(i + 1 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
+                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()] + '</span>';
+                i++;
+            } else if(i + 2 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
+                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()] + '</span>';
+                i++;
+                i++;
+            } else if(this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase())){
+                word = '<span class="highlight">' + this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase()) + '</span>';
+            } else if(this.getKeyByValue(americanToBritishTitles, words[i])){
+                word = '<span class="highlight">' + this.getKeyByValue(americanToBritishTitles, words[i].toLowerCase()) + '</span>';
+                i++;
+            } else {
+                word = words[i];
+            }
+            if(i + 1 <= words.length && words[i + 1] === '.'){
+                translated.push(word + '.');
+                i++;
+            } else {
+                translated.push(word);
+            }              
+        }
+        let result = translated.join(' ');
+        return result;  
     }
 
     translateToBritish(text) {
@@ -43,18 +73,19 @@ class Translator {
                 word = words[i];
             }
             if(i + 1 <= words.length && words[i + 1] === '.'){
-                words[i] += '.';
                 translated.push(word + '.');
                 i++;
             } else {
                 translated.push(word);
             }
-        }
+        }        
         let result = translated.join(' ');
         return result;               
     }
 
-    
+    getKeyByValue(obj, value){
+        return Object.keys(obj).find(key => obj[key] === value);
+    }
 }
 
 module.exports = Translator;
