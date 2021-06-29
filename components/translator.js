@@ -9,10 +9,8 @@ class Translator {
     }
 
     translateToBritish(text) {
-        console.log(text);
         //let words = text.split(/\s|(?=[\.](?!\s))/);
         let words = text.split(/\s|(?=[\.])/);
-        console.log(words);
         let translated = []
         let word;
         for (let i = 0; i < words.length; i++) {
@@ -28,7 +26,6 @@ class Translator {
             } else if (americanToBritishSpelling[words[i].toLowerCase()]) {
                 word = '<span class="highlight">' + americanToBritishSpelling[words[i].toLowerCase()] + '</span>';
             } else if (americanToBritishTitles[words[i].toLowerCase() + '.']) {
-                console.log('this is a title');
                 let title = [];
                 let titleLength = americanToBritishTitles[words[i].toLowerCase() + '.'].length;
                 for(let j = 0; j < titleLength; j++){
@@ -55,13 +52,11 @@ class Translator {
             }
         }
         if( translated[translated.length - 1] === '.'){
-            console.log('period')
             let last = translated.pop();
             let result = translated.join(' ');
             result += last;
             return result;
         } else {
-            console.log('no period')
             let result = translated.join(' ');
             return result;
         }                
