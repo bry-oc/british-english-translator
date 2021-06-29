@@ -9,7 +9,9 @@ class Translator {
     }
 
     translateToBritish(text) {
-        let words = text.split(' ');
+        console.log(text);
+        let words = text.split(/\s|(?=[\.](?!\s))/);
+        console.log(words);
         for (let i = 0; i < words.length; i++) {
             if (americanOnly[words[i].toLowerCase()]) {
                 words[i] = americanOnly[words[i].toLowerCase()];
@@ -21,8 +23,19 @@ class Translator {
                 words[i] = americanToBritishTitles[words[i].toLowerCase()];
             }
         }
-        let result = words.join(' ');
-        return result;
+        if( words[words.length - 1] === '.'){
+            console.log('period')
+            let last = words.pop();
+            let result = words.join(' ');
+            result += last;
+            return result;
+        } else {
+            console.log('no period')
+            let result = words.join(' ');
+            return result;
+        }        
+        //console.log(result);
+        
     }
 
 
