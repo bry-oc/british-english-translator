@@ -5,10 +5,9 @@ const britishOnly = require('./british-only.js')
 
 class Translator {
     translateToAmerican(text) {
-        let words = text.split(/\s|(?=[\.](?!\d\d))/);
+        let words = text.split(/\s|(?=[\.(?!\d\d)|\?|\!])/);
         let translated = []
         let word;
-        console.log(words);
         for(let i = 0; i < words.length; i++) {
             if (britishOnly[words[i].toLowerCase()]) {
                 word = '<span class="highlight">' + britishOnly[words[i].toLowerCase()] + '</span>'; 
@@ -29,8 +28,8 @@ class Translator {
             } else {
                 word = words[i];
             }
-            if(i + 1 <= words.length && words[i + 1] === '.'){
-                translated.push(word + '.');
+            if(i + 1 <= words.length && words[i + 1] === '.' || words[i + 1] === '?' || words[i + 1] === '!'){
+                translated.push(word + words[i + 1]);
                 i++;
             } else {
                 translated.push(word);
@@ -41,11 +40,11 @@ class Translator {
     }
 
     translateToBritish(text) {
-        let words = text.split(/\s|(?=[\.])/);
+        let words = text.split(/\s|(?=[\.|\?|\!])/);
         let translated = []
         let word;
         for (let i = 0; i < words.length; i++) {
-            if (americanOnly[words[i].toLowerCase()]) {
+            if (americanOnly[words[i].toLowerCase()]) {                
                 word = '<span class="highlight">' + americanOnly[words[i].toLowerCase()] + '</span>';
             } else if(i + 1 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
                 word = '<span class="highlight">' + americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()] + '</span>';
@@ -56,7 +55,7 @@ class Translator {
                 i++;
             } else if (americanToBritishSpelling[words[i].toLowerCase()]) {
                 word = '<span class="highlight">' + americanToBritishSpelling[words[i].toLowerCase()] + '</span>';
-            } else if (americanToBritishTitles[words[i].toLowerCase() + '.']) {
+            } else if (i + 1 <= words.length - 1 && americanToBritishTitles[words[i].toLowerCase() + words[i+1].toLowerCase()]) {
                 let title = [];
                 let titleLength = americanToBritishTitles[words[i].toLowerCase() + '.'].length;
                 for(let j = 0; j < titleLength; j++){
@@ -74,8 +73,8 @@ class Translator {
             } else {
                 word = words[i];
             }
-            if(i + 1 <= words.length && words[i + 1] === '.'){
-                translated.push(word + '.');
+            if(i + 1 <= words.length && (words[i + 1] === '.' || words[i + 1] === '?' || words[i + 1] === '!')){
+                translated.push(word + words[i+1]);
                 i++;
             } else {
                 translated.push(word);
