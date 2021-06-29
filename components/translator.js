@@ -9,7 +9,6 @@ class Translator {
     }
 
     translateToBritish(text) {
-        //let words = text.split(/\s|(?=[\.](?!\s))/);
         let words = text.split(/\s|(?=[\.])/);
         let translated = []
         let word;
@@ -43,7 +42,7 @@ class Translator {
             } else {
                 word = words[i];
             }
-            if(words[i + 1] === '.'){
+            if(i + 1 <= words.length && words[i + 1] === '.'){
                 words[i] += '.';
                 translated.push(word + '.');
                 i++;
@@ -51,18 +50,11 @@ class Translator {
                 translated.push(word);
             }
         }
-        if( translated[translated.length - 1] === '.'){
-            let last = translated.pop();
-            let result = translated.join(' ');
-            result += last;
-            return result;
-        } else {
-            let result = translated.join(' ');
-            return result;
-        }                
+        let result = translated.join(' ');
+        return result;               
     }
 
-
+    
 }
 
 module.exports = Translator;
