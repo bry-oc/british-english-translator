@@ -12,14 +12,20 @@ class Translator {
         console.log(text);
         let words = text.split(/\s|(?=[\.](?!\s))/);
         console.log(words);
+        let translated = []
         for (let i = 0; i < words.length; i++) {
             if (americanOnly[words[i].toLowerCase()]) {
-                words[i] = americanOnly[words[i].toLowerCase()];
-            }
-            if (americanToBritishSpelling[words[i].toLowerCase()]) {
-                words[i] = americanToBritishSpelling[words[i].toLowerCase()];
-            }
-            if (americanToBritishTitles[words[i].toLowerCase()]) {
+                translated.push(americanOnly[words[i].toLowerCase()]);
+            } else if(i + 1 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
+                translated.push(americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]);
+                i++;
+            } else if(i + 2 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
+                translated.push(americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]);
+                i++;
+                i++;
+            } else if (americanToBritishSpelling[words[i].toLowerCase()]) {
+                translated.push(americanToBritishSpelling[words[i].toLowerCase()]);
+            } else if (americanToBritishTitles[words[i].toLowerCase()]) {
                 let title = [];
                 let titleLength = americanToBritishTitles[words[i].toLowerCase()].length;
                 for(let j = 0; j < titleLength; j++){
@@ -30,21 +36,22 @@ class Translator {
                     }                    
                 }
                 title = title.join('');               
-                words[i] = title;
-            }
-            if(words[i].match(/\d\d?:\d{2}/)){
-                words[i] = words[i].replace(':','.');
+                translated.push(title);
+            } else if(words[i].match(/\d\d?:\d{2}/)){
+                translated.push(words[i].replace(':','.'));
+            } else {
+                translated.push(words[i]);
             }
         }
-        if( words[words.length - 1] === '.'){
+        if( translated[translated.length - 1] === '.'){
             console.log('period')
-            let last = words.pop();
-            let result = words.join(' ');
+            let last = translated.pop();
+            let result = translated.join(' ');
             result += last;
             return result;
         } else {
             console.log('no period')
-            let result = words.join(' ');
+            let result = translated.join(' ');
             return result;
         }                
     }
