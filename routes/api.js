@@ -23,7 +23,11 @@ module.exports = function (app) {
       }
       if(locale === 'american-to-british'){
         let translation = translator.translateToBritish(text);
-        return res.json({text: text, translation: translation});
+        if(text === translation){
+          return res.json({text: text, translation: 'Everything looks good to me!'});
+        } else {
+          return res.json({text: text, translation: translation});
+        }        
       }
     });
 };
