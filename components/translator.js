@@ -5,19 +5,20 @@ const britishOnly = require('./british-only.js')
 
 class Translator {
     translateToAmerican(text) {
-        let words = text.split(/\s|(?=[\.(?!\d\d)|\?|\!])/);
+        let words = text.split(/\s|(?=[(?<!\d\d?)\.(?!\d\d)])|(?=[\?|\!])/);
+        console.log(words);
         let translated = []
         let word;
-        for(let i = 0; i < words.length; i++) {
-            if (britishOnly[words[i].toLowerCase()]) {
-                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase()] + '</span>'; 
-            } else if(i + 1 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
-                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()] + '</span>';
-                i++;
-            } else if(i + 2 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
+        for(let i = 0; i < words.length; i++) {            
+            if(i + 2 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
                 word = '<span class="highlight">' + britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()] + '</span>';
                 i++;
                 i++;
+            } else if(i + 1 <= words.length - 1 && britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
+                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()] + '</span>';
+                i++;
+            } else if (britishOnly[words[i].toLowerCase()]) {
+                word = '<span class="highlight">' + britishOnly[words[i].toLowerCase()] + '</span>'; 
             } else if(this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase())){
                 word = '<span class="highlight">' + this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase()) + '</span>';
             } else if(this.getKeyByValue(americanToBritishTitles, words[i].toLowerCase())){
@@ -28,13 +29,14 @@ class Translator {
             } else {
                 word = words[i];
             }
-            if(i + 1 <= words.length && words[i + 1] === '.' || words[i + 1] === '?' || words[i + 1] === '!'){
+            if(i + 1 <= words.length && (words[i + 1] === '.' || words[i + 1] === '?' || words[i + 1] === '!')){
                 translated.push(word + words[i + 1]);
                 i++;
             } else {
                 translated.push(word);
             }              
         }
+        console.log(translated.join(' '));
         let result = translated.join(' ');
         return result;  
     }
@@ -43,15 +45,15 @@ class Translator {
         let words = text.split(/\s|(?=[\.|\?|\!])/);
         let translated = []
         let word;
-        for (let i = 0; i < words.length; i++) {
-            if (americanOnly[words[i].toLowerCase()]) {                
+        for (let i = 0; i < words.length; i++) {            
+            if(i + 2 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
+                word = '<span class="highlight">' + americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()] + '</span>';
+                i++;
+                i++;
+            } else if (americanOnly[words[i].toLowerCase()]) {                
                 word = '<span class="highlight">' + americanOnly[words[i].toLowerCase()] + '</span>';
             } else if(i + 1 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()]){
                 word = '<span class="highlight">' + americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase()] + '</span>';
-                i++;
-            } else if(i + 2 <= words.length - 1 && americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()]){
-                word = '<span class="highlight">' + americanOnly[words[i].toLowerCase() + " " + words[i+1].toLowerCase() + " " + words[i+2].toLowerCase()] + '</span>';
-                i++;
                 i++;
             } else if (americanToBritishSpelling[words[i].toLowerCase()]) {
                 word = '<span class="highlight">' + americanToBritishSpelling[words[i].toLowerCase()] + '</span>';
