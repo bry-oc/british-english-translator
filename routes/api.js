@@ -12,12 +12,12 @@ module.exports = function (app) {
     .post(upload.none(), (req, res) => {
       let text = req.body.text;
       let locale = req.body.locale;
-      if(!text || !locale) {
-        return res.json({ error: 'Required field(s) missing' });
-      }
-      if(text.length <= 0){
+      if(!(/\w+/.test(text))){
         return res.json({ error: 'No text to translate' });
       }
+      if(!text || !locale) {
+        return res.json({ error: 'Required field(s) missing' });
+      }      
       if(locale != 'american-to-british' && locale != 'british-to-american'){
         return res.json({ error: 'Invalid value for locale field' });
       }

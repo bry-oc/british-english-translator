@@ -46,6 +46,14 @@ suite('Unit Tests', () => {
             let translated = translator.translateToBritish('Lunch is at 12:15 today.');
             assert.equal(translated, 'Lunch is at <span class="highlight">12.15</span> today.');
         });
+        test('Highlight translation in Mangoes are my favorite fruit.', function () {
+            let translated = translator.translateToBritish('Mangoes are my favorite fruit.');
+            assert.equal(translated.includes('<span class="highlight">favourite</span>'), true);
+        });
+        test('Highlight translation in I ate yogurt for breakfast.', function () {
+            let translated = translator.translateToBritish('I ate yogurt for breakfast.');
+            assert.equal(translated.includes('<span class="highlight">yoghurt</span>'), true);
+        });
     });
 
     suite('Translate from British English to American English', function () {
@@ -88,6 +96,14 @@ suite('Unit Tests', () => {
         test('Translate: Tea time is usually around 4 or 4.30. to American English', function () {
             let translated = translator.translateToAmerican('Tea time is usually around 4 or 4.30.');
             assert.equal(translated, 'Tea time is usually around 4 or <span class=\"highlight\">4:30</span>.');
+        });
+        test('Highlight translation in We watched the footie match for a while.', function () {
+            let translated = translator.translateToAmerican('We watched the footie match for a while.');
+            assert.equal(translated.includes('<span class="highlight">soccer</span>'), true);
+        });
+        test('Highlight translation in Paracetamol takes up to an hour to work.', function () {
+            let translated = translator.translateToAmerican('Paracetamol takes up to an hour to work.');
+            assert.equal(translated.includes('<span class="highlight">Tylenol</span>'), true);
         });
     });
 });
