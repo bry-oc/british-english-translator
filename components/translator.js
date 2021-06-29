@@ -5,7 +5,7 @@ const britishOnly = require('./british-only.js')
 
 class Translator {
     translateToAmerican(text) {
-        let words = text.split(/\s|(?=[\.])/);
+        let words = text.split(/\s|(?=[\.](?!\d\d))/);
         let translated = []
         let word;
         console.log(words);
@@ -21,9 +21,11 @@ class Translator {
                 i++;
             } else if(this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase())){
                 word = '<span class="highlight">' + this.getKeyByValue(americanToBritishSpelling, words[i].toLowerCase()) + '</span>';
-            } else if(this.getKeyByValue(americanToBritishTitles, words[i])){
-                word = '<span class="highlight">' + this.getKeyByValue(americanToBritishTitles, words[i].toLowerCase()) + '</span>';
-                i++;
+            } else if(this.getKeyByValue(americanToBritishTitles, words[i].toLowerCase())){
+                let title = this.getKeyByValue(americanToBritishTitles, words[i].toLowerCase());
+                word = '<span class="highlight">' + title.charAt(0).toUpperCase() + title.slice(1) + '</span>';                
+            } else if(words[i].match(/\d\d?\.\d{2}/)){
+                word = '<span class="highlight">' + words[i].replace('.',':') + '</span>';
             } else {
                 word = words[i];
             }
